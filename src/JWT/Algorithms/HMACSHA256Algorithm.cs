@@ -12,6 +12,6 @@ namespace JWT.Algorithms
             }
         }
 
-        public string Name => JwtHashAlgorithm.HS256.ToString();
+		public string Name { get { return JwtHashAlgorithm.HS256.ToString(); } }
     }
 }

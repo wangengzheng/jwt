@@ -21,7 +21,7 @@ namespace JWT
                 case JwtHashAlgorithm.HS512:
                     return new HMACSHA512Algorithm();
                 default:
-                    throw new InvalidOperationException($"Algorithm {algorithm} is not supported.");
+                    throw new InvalidOperationException("Algorithm {algorithm} is not supported.");
             }
         }
     }
