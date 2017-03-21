@@ -1,0 +1,114 @@
+reateingTokens();
+  
+    VerifyingTokens();
+      
+        expClam();
+	}
+
+	// Define other methods and classes here
+	//C:\1_项目目录\1_Code\git\jwt\src\JWT\bin\Debug
+
+
+
+	void CreateingTokens()
+	{
+
+		var payload = new Dictionary<string, object>
+		{
+		    { "claim1", 0 },
+		        { "claim2", "claim2-value" }
+			};
+			var secret = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
+
+			IJwtAlgorithm algorithm = new HMACSHA256Algorithm();
+			IJsonSerializer serializer = new JsonNetSerializer();
+			IJwtEncoder encoder = new JwtEncoder(algorithm, serializer);
+
+			var token = encoder.Encode(payload, secret);
+			Console.WriteLine(token);
+
+
+			}
+
+			void VerifyingTokens()
+			{
+			var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjbGFpbTEiOjAsImNsYWltMiI6ImNsYWltMi12YWx1ZSJ9.8pwBI_HtXqI3UgQHQ_rDRnSQRxFL1SR8fbQoS-5kM5s";
+			var secret = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
+			try
+			{
+			    IJsonSerializer serializer = new JsonNetSerializer();
+			        IDateTimeProvider provider = new UtcDateTimeProvider();
+				    IJwtValidator validator = new JwtValidator(serializer, provider);
+				        IJwtDecoder decoder = new JwtDecoder(serializer, validator);
+					    
+					        var json = decoder.Decode(token, secret, verify: true);
+						    Console.WriteLine(json);
+						    	
+								
+									var payload = decoder.DecodeToObject<IDictionary<string, object>>(token, secret,true);
+										
+											payload.Dump();
+											    //Console.WriteLine(payload["claim2"]);
+
+
+
+											    }
+											    catch (TokenExpiredException)
+											    {
+											        Console.WriteLine("Token has expired");
+												}
+												catch (SignatureVerificationException)
+												{
+												    Console.WriteLine("Token has invalid signature");
+												    }
+
+												     
+												     }
+
+
+
+
+												     void expClam()
+												     {
+
+												     IDateTimeProvider provider = new UtcDateTimeProvider();
+												     var now = provider.GetNow();
+
+												     //now =DateTime.Now.AddDays(1); //no throw
+
+												     now = provider.GetNow().AddSeconds(3);
+
+												     var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+												     var secondsSinceEpoch = Math.Round((now - unixEpoch).TotalSeconds);
+
+												     Console.WriteLine (secondsSinceEpoch);
+
+
+												     var payload = new Dictionary<string, object>
+												     {
+												         { "exp", secondsSinceEpoch }
+													 };
+													 var secret = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
+
+													 IJwtAlgorithm algorim = new HMACSHA256Algorithm();
+													 IJsonSerializer serializer = new JsonNetSerializer();
+													 IJwtEncoder encoder = new JwtEncoder(algorithm, serializer);
+
+
+													     IJwtValidator validator = new JwtValidator(serializer, provider);
+													         IJwtDecoder decoder = new JwtDecoder(serializer, validator);
+														 	
+																
+																var token = encoder.Encode(payload, secret);
+
+																//System.Threading.Thread.Sleep(4000);  // will throw
+																//System.Threading.Thread.Sleep(120);  //no throw
+
+
+																var json = decoder.Decode(token, secret,true); // TokenExpiredException
+
+
+
+
+
+																}
